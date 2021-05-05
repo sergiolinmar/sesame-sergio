@@ -21,6 +21,10 @@ module.exports = {
           green: '#5EBEA3',
           salmon: '#FF9984'
         }
+      },
+      fontSize: {
+        'xs': '.75rem',
+        'base': '0.94rem'
       }
     },
     variants: {
