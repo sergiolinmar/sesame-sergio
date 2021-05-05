@@ -1,0 +1,17 @@
+.user__avatar {
+  position: relative;
+
+  img {
+    max-width: 24px;
+    max-height: 24px;
+  }
+
+  &__status {
+    position: absolute;
+    top: calc(50% - 4.5px);
+    right: -4.5px;
+    width: 9px;
+    height: 9px;
+    @apply rounded-full;
+  }
+}
