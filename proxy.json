@@ -1,0 +1,10 @@
+{
+  "/api": {
+    "target": "https://api.sesametime.com/schedule/v1",
+    "secure": false,
+    "pathRewrite": {
+      "^/api": ""
+    },
+    "changeOrigin": true
+  }
+}
