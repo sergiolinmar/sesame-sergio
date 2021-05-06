@@ -18,11 +18,15 @@ module.exports = {
             dark: '#707070',
             'extra-dark': '#3F3F3F'
           },
-          green: '#5EBEA3',
+          green: {
+            default: '#5EBEA3',
+            light: '#D8F2EC'
+          },
           salmon: '#FF9984'
         }
       },
       fontSize: {
+        'xxs': '.62rem',
         'xs': '.75rem',
         'base': '0.94rem'
       }

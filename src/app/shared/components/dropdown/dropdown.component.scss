@@ -1,0 +1,56 @@
+.dropdown {
+  position: relative;
+  
+  &:hover &__wrapper {
+    display: block;
+  }
+
+  &:hover::before {
+    width: 100%;
+    top: 0px;
+    position: absolute;
+    padding-bottom: 36px;
+    height: 100%;
+    content: "";
+  }
+
+  &__wrapper {
+    top: 36px;
+    right: 0;
+    position: absolute;
+    min-width: 246px;
+    display: none;
+    @apply text-grey-extra-dark;
+  }
+
+  &__menu {
+    position: relative;
+
+    &:hover  &__sub {
+      display: block;
+    }
+
+    &:first-of-type, &__sub__item:first-of-type {
+      @apply rounded-t-lg;
+    }
+
+    &:last-of-type, &__sub__item:last-of-type {
+      @apply rounded-b-lg;
+    }
+  
+    &__sub {
+      top: 0;
+      position: absolute;
+      min-width: 246px;
+      left: -246px;
+      display: none;
+    }
+  }
+
+  &__account__template {
+    img {
+      max-width: 24px;
+      max-height: 24px;
+    }
+  }
+}

@@ -8,6 +8,7 @@ import { TimeTrackerComponent } from './pages/time-tracker-page/components/time-
 import { TimeTrackerUserComponent } from './pages/time-tracker-page/components/time-tracker-user/time-tracker-user.component';
 import { UserAvatarComponent } from './shared/components/user-avatar/user-avatar.component';
 import { HttpClientModule } from '@angular/common/http';
+import { DropdownComponent } from './shared/components/dropdown/dropdown.component';
 
 @NgModule({
   declarations: [
@@ -15,7 +16,8 @@ import { HttpClientModule } from '@angular/common/http';
     TimeTrackerPageComponent,
     TimeTrackerComponent,
     TimeTrackerUserComponent,
-    UserAvatarComponent
+    UserAvatarComponent,
+    DropdownComponent
   ],
   imports: [
     BrowserModule,

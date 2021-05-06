@@ -1,0 +1,51 @@
+<div class="dropdown cursor-pointer hover:text-green-default">
+  <ng-content></ng-content>
+  <div class="dropdown__wrapper grid grid-cols-1 divide-y divide-grey-extra-light bg-white rounded-lg shadow-lg">
+    <div 
+      class="dropdown__menu p-4 text-center text-xs hover:bg-green-light cursor-pointer" 
+      *ngFor="let item of config.items"
+      (click)="item.fn && item.fn()">
+        <img 
+          src="../../../../assets/icons/chevron.svg" 
+          class="transform rotate-90 absolute left-3" 
+          *ngIf="item.items">
+        {{item.label}}
+      <div 
+        class="dropdown__menu__sub pr-2" 
+        *ngIf="item.items">
+        <div class="grid grid-cols-1 divide-y divide-grey-extra-light bg-white rounded-lg shadow-lg">
+          <div 
+          class="dropdown__menu__sub__item px-4 text-center text-xs hover:bg-green-light cursor-pointer" 
+          *ngFor="let subItem of item.items; index as i"
+          (click)="item.fn && item.fn()">
+            <ng-container 
+              [ngTemplateOutlet]="subItem.type === EDropdownTypes.USER_ACCOUNT ? userAccountTemplate : subItemTemplate"
+              [ngTemplateOutletContext]="{subItem: subItem, index: i}">
+            </ng-container>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<ng-template #subItemTemplate let-subItem="subItem">
+  <div class="py-4">{{ subItem?.label }}</div>
+</ng-template>
+
+<ng-template #userAccountTemplate let-subItem="subItem" let-index="index">
+  <div class="dropdown__account__template flex items-center text-left py-2">
+    <img 
+      [src]="subItem?.extra?.user?.avatar" 
+      class="rounded-full mr-3" >
+    <div>
+      <div class="text-xs">
+        <b class="mr-2">Sesame {{index + 1}}</b> 
+        {{ subItem?.extra?.user?.name }}
+      </div>
+      <div class="text-xxs text-grey-light">
+        Hoy llevas {{ subItem?.extra?.user?.timeToday }}
+      </div>
+    </div>
+  </div>
+</ng-template>

@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
+import { IUser } from 'src/app/shared/models/user.model';
 
 @Component({
   selector: 'app-time-tracker-user',
@@ -6,6 +7,7 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./time-tracker-user.component.scss']
 })
 export class TimeTrackerUserComponent implements OnInit {
+  @Input() user: IUser;
 
   constructor() { }
 
