@@ -1,7 +1,7 @@
 <div class="user__avatar mr-3" *ngIf="user">
   <img [src]="user.avatar" class="rounded-full" >
   <div 
-    class="user__avatar__status bg-green-default"
+    class="user__avatar__status"
     [ngClass]="{
       'bg-green-default' : user.status == EUserStatus.ONLINE, 
       'bg-salmon' : user.status == EUserStatus.OFFLINE,
