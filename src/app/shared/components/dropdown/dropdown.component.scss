@@ -37,16 +37,16 @@
   &__menu {
     position: relative;
 
-    &:hover  &__sub {
-      display: block;
-    }
-
     &:first-of-type, &__sub__item:first-of-type {
       @apply rounded-t-lg;
     }
 
     &:last-of-type, &__sub__item:last-of-type {
       @apply rounded-b-lg;
+    }
+    
+    &:hover  &__sub {
+      display: block;
     }
   
     &__sub {
@@ -58,10 +58,8 @@
     }
   }
 
-  &__account__template {
-    img {
-      max-height: 24px;
-      max-width: 24px;
-    }
+  &__account__template img {
+    max-height: 24px;
+    max-width: 24px;
   }
 }

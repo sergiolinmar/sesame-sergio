@@ -1,5 +1,5 @@
 <div class="time__tracker__user flex items-center mx-1.5" *ngIf="user">
   <app-user-avatar [user]="user"></app-user-avatar>
-  <div class="font-bold px-2.5">Kelly Pierce</div>
+  <div class="font-bold px-2.5">{{ user.name }}</div>
   <img src="../../assets/icons/chevron.svg">
 </div>

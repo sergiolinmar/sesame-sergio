@@ -8,8 +8,7 @@ import * as moment from 'moment';
 
 @Component({
   selector: 'app-time-tracker-page',
-  templateUrl: './time-tracker-page.component.html',
-  styleUrls: ['./time-tracker-page.component.scss']
+  templateUrl: './time-tracker-page.component.html'
 })
 export class TimeTrackerPageComponent {
   public config: ITimeTrackerConfig;
@@ -22,15 +21,8 @@ export class TimeTrackerPageComponent {
 
   private setConfig(params: {
     user: IUser,
-    actualTime: string,
     totalTime: string
   }): void {
-
-    const secondAccount: IUser = { 
-      ...params.user, 
-      avatar: 'https://i.pravatar.cc/32?img=2' 
-    };
-
     this.config = {
       user: params.user,
       dropdown: {
@@ -48,7 +40,10 @@ export class TimeTrackerPageComponent {
               {
                 type: EDropdownTypes.USER_ACCOUNT,
                 extra: {
-                  user: secondAccount,
+                  user: { 
+                    ...params.user, 
+                    avatar: 'https://i.pravatar.cc/32?img=2' 
+                  },
                   timeToday: moment('00:00:00', 'HH:mm:ss').format("HH:mm:ss")
                 }
               }
@@ -56,10 +51,10 @@ export class TimeTrackerPageComponent {
           },
           { label: 'Vista empleado' },
           { label: 'Mi perfil' },
-          { label: 'Cerrar sesión', fn: () => { console.log('hola'); } }
+          { label: 'Cerrar sesión' }
       ]},
       timeTracker: {
-        actualTime: params.actualTime,
+        actualTime: params.totalTime,
         totalTime: params.totalTime
       }
     };
@@ -68,18 +63,18 @@ export class TimeTrackerPageComponent {
   private getInitialInfo(): void {
     this.timeTrackerService.get().subscribe((res) => {
       const { employee, workEntryIn, workEntryOut } = res.data.sort((a,b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())[0];
-      let actualTime: string;
+      let totalTime: string;
 
       switch (employee.workStatus) {
         case EUserStatus.OFFLINE:
-          actualTime = workEntryOut?.date ? moment.utc(moment(workEntryOut.date).diff(moment(workEntryIn.date))).format("HH:mm:ss") : moment('00:00:00', 'HH:mm:ss').format("HH:mm:ss");
+          totalTime = workEntryOut?.date ? moment.utc(moment(workEntryOut.date).diff(moment(workEntryIn.date))).format("HH:mm:ss") : moment('00:00:00', 'HH:mm:ss').format("HH:mm:ss");
           break;
         case EUserStatus.PAUSED:
         case EUserStatus.ONLINE:
           if (workEntryOut?.date) {
-            actualTime = moment.utc(moment(workEntryOut.date).diff(moment(workEntryIn.date))).format("HH:mm:ss");
+            totalTime = moment.utc(moment(workEntryOut.date).diff(moment(workEntryIn.date))).format("HH:mm:ss");
           } else {
-            actualTime = moment.utc(moment().diff(moment(workEntryIn.date))).format("HH:mm:ss");
+            totalTime = moment.utc(moment().diff(moment(workEntryIn.date))).format("HH:mm:ss");
           }
           break;
       }
@@ -91,8 +86,7 @@ export class TimeTrackerPageComponent {
           avatar: 'https://i.pravatar.cc/32?img=1',
           status: employee.workStatus
         },
-        actualTime: actualTime,
-        totalTime: actualTime
+        totalTime: totalTime
       });
     });
   }

@@ -2,16 +2,16 @@
   position: relative;
 
   img {
-    max-width: 24px;
     max-height: 24px;
+    max-width: 24px;
   }
 
   &__status {
-    position: absolute;
-    top: calc(50% - 4.5px);
-    right: -4.5px;
-    width: 9px;
     height: 9px;
+    position: absolute;
+    right: -4.5px;
+    top: calc(50% - 4.5px);
+    width: 9px;
     @apply rounded-full;
   }
 }

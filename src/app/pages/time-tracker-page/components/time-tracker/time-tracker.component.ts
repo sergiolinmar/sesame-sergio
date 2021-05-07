@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, Input, OnChanges, OnInit } from '@angular/core';
+import { Component, Input, OnChanges } from '@angular/core';
 import * as moment from 'moment';
 import { EUserStatus } from 'src/app/shared/models/user.model';
 import { TimeTrackerService } from '../../services/time-tracker.service';
@@ -25,14 +25,14 @@ export class TimeTrackerComponent implements OnChanges{
   }
 
   public btnStart(): void {
-    this.timeTrackerService.clockIn(this.config.user.id).subscribe((data) => {
+    this.timeTrackerService.clockIn(this.config.user.id).subscribe(() => {
       this.config.user.status = EUserStatus.ONLINE;
       this.setCounter();
     });
   }
 
   public btnFinish(): void {
-    this.timeTrackerService.clockOut(this.config.user.id).subscribe((data) => {
+    this.timeTrackerService.clockOut(this.config.user.id).subscribe(() => {
       this.config.user.status = EUserStatus.OFFLINE;
       this.config.timeTracker.totalTime = this.config.timeTracker.actualTime;
       clearInterval(this.counter);
@@ -54,5 +54,4 @@ export class TimeTrackerComponent implements OnChanges{
       this.config.timeTracker.actualTime = moment(this.config.timeTracker.actualTime, 'HH:mm:ss').add(1, 'second').format("HH:mm:ss");
     }, 1000);
   }
-
 }
