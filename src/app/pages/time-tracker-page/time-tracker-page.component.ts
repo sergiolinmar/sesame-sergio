@@ -1,6 +1,5 @@
 import { Component } from '@angular/core';
 import { TimeTrackerService } from './services/time-tracker.service';
-import * as _ from 'lodash';
 import { EDropdownTypes } from 'src/app/shared/components/dropdown/dropdown.model';
 import { EUserStatus, IUser } from 'src/app/shared/models/user.model';
 import { ITimeTrackerConfig } from './components/time-tracker/time-tracker.model';
