@@ -27,6 +27,8 @@ export class TimeTrackerComponent implements OnChanges{
   public btnStart(): void {
     this.timeTrackerService.clockIn(this.config.user.id).subscribe(() => {
       this.config.user.status = EUserStatus.ONLINE;
+      this.config.timeTracker.actualTime = moment('00:00:00', 'HH:mm:ss').format("HH:mm:ss");
+     
       this.setCounter();
     });
   }
@@ -34,7 +36,10 @@ export class TimeTrackerComponent implements OnChanges{
   public btnFinish(): void {
     this.timeTrackerService.clockOut(this.config.user.id).subscribe(() => {
       this.config.user.status = EUserStatus.OFFLINE;
-      this.config.timeTracker.totalTime = this.config.timeTracker.actualTime;
+
+      const timeSum =  moment.duration(this.config.timeTracker.totalTime).add(moment.duration(this.config.timeTracker.actualTime));
+      this.config.timeTracker.actualTime = this.config.timeTracker.totalTime = moment.utc(timeSum.as('milliseconds')).format("HH:mm:ss");
+      
       clearInterval(this.counter);
     });
   }
@@ -42,9 +47,11 @@ export class TimeTrackerComponent implements OnChanges{
   public btnPause(): void {
     if (this.config.user.status === EUserStatus.PAUSED) {
       this.config.user.status = EUserStatus.ONLINE;
+      
       this.setCounter();
       return;
     }
+    
     this.config.user.status = EUserStatus.PAUSED;
     clearInterval(this.counter);
   }

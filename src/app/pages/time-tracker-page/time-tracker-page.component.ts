@@ -20,6 +20,7 @@ export class TimeTrackerPageComponent {
 
   private setConfig(params: {
     user: IUser,
+    actualTime: string,
     totalTime: string
   }): void {
     this.config = {
@@ -53,7 +54,7 @@ export class TimeTrackerPageComponent {
           { label: 'Cerrar sesión' }
       ]},
       timeTracker: {
-        actualTime: params.totalTime,
+        actualTime: params.actualTime,
         totalTime: params.totalTime
       }
     };
@@ -62,14 +63,16 @@ export class TimeTrackerPageComponent {
   private getInitialInfo(): void {
     this.timeTrackerService.get().subscribe((res) => {
       const { employee, workEntryIn, workEntryOut } = res.data.sort((a,b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())[0];
-      let totalTime: string;
+      let actualTime: string, totalTime: string;
 
       switch (employee.workStatus) {
         case EUserStatus.OFFLINE:
-          totalTime = workEntryOut?.date ? moment.utc(moment(workEntryOut.date).diff(moment(workEntryIn.date))).format("HH:mm:ss") : moment('00:00:00', 'HH:mm:ss').format("HH:mm:ss");
+          actualTime = totalTime = workEntryOut?.date ? moment.utc(moment(workEntryOut.date).diff(moment(workEntryIn.date))).format("HH:mm:ss") : moment('00:00:00', 'HH:mm:ss').format("HH:mm:ss");
           break;
         case EUserStatus.PAUSED:
         case EUserStatus.ONLINE:
+          actualTime = moment('00:00:00', 'HH:mm:ss').format("HH:mm:ss");
+
           if (workEntryOut?.date) {
             totalTime = moment.utc(moment(workEntryOut.date).diff(moment(workEntryIn.date))).format("HH:mm:ss");
           } else {
@@ -85,6 +88,7 @@ export class TimeTrackerPageComponent {
           avatar: 'https://i.pravatar.cc/32?img=1',
           status: employee.workStatus
         },
+        actualTime: actualTime,
         totalTime: totalTime
       });
     });
