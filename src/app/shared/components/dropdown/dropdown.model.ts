@@ -14,7 +14,7 @@ export interface IDropdownConfig {
       type?: EDropdownTypes;
       extra?: {
         user?: IUser;
-        timeToday?: Date;
+        timeToday?: string;
       }
     }[];
   }[]

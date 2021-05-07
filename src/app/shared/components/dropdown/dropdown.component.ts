@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { IDropdownConfig, EDropdownTypes } from './dropdown.model';
 
 @Component({
@@ -6,15 +6,9 @@ import { IDropdownConfig, EDropdownTypes } from './dropdown.model';
   templateUrl: './dropdown.component.html',
   styleUrls: ['./dropdown.component.scss']
 })
-export class DropdownComponent implements OnInit {
+export class DropdownComponent {
   @Input() config: IDropdownConfig;
   public EDropdownTypes = EDropdownTypes;
 
-  constructor() {
-    
-  }
-
-  public ngOnInit(): void {
-    console.log(this.config);
-  }
+  constructor() {}
 }

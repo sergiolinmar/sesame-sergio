@@ -1,52 +1,38 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { TimeTrackerService } from './services/time-tracker.service';
 import * as _ from 'lodash';
-import { IDropdownConfig, EDropdownTypes } from 'src/app/shared/components/dropdown/dropdown.model';
+import { EDropdownTypes } from 'src/app/shared/components/dropdown/dropdown.model';
 import { EUserStatus, IUser } from 'src/app/shared/models/user.model';
+import { ITimeTrackerConfig } from './components/time-tracker/time-tracker.model';
+import * as moment from 'moment';
 
 @Component({
   selector: 'app-time-tracker-page',
   templateUrl: './time-tracker-page.component.html',
   styleUrls: ['./time-tracker-page.component.scss']
 })
-export class TimeTrackerPageComponent implements OnInit {
-  public config: {
-    user: IUser,
-    dropdown: IDropdownConfig
-  };
-
-  private user: IUser;
+export class TimeTrackerPageComponent {
+  public config: ITimeTrackerConfig;
 
   constructor(
     private timeTrackerService: TimeTrackerService
   ) {
-    this.timeTrackerService.get().subscribe((data) => {
-      const { employee, workEntryIn, workEntryOut } = _.max(data.data, function(el) { 
-        return new Date(el.workEntryIn.createdAt).getTime();
-      });
-
-      this.user = {
-        id: employee.id,
-        name: `${employee.firstName} ${employee.lastName}`,
-        avatar: 'https://i.pravatar.cc/32?img=1',
-        status: employee.workStatus
-      };
-      this.setConfig();
-    })
+    this.getInitialInfo();
   }
 
-  ngOnInit(): void {
-  }
-
-  private setConfig(): void {
+  private setConfig(params: {
+    user: IUser,
+    actualTime: string,
+    totalTime: string
+  }): void {
 
     const secondAccount: IUser = { 
-      ...this.user, 
+      ...params.user, 
       avatar: 'https://i.pravatar.cc/32?img=2' 
     };
 
     this.config = {
-      user: this.user,
+      user: params.user,
       dropdown: {
         items: [
           {
@@ -55,13 +41,15 @@ export class TimeTrackerPageComponent implements OnInit {
               {
                 type: EDropdownTypes.USER_ACCOUNT,
                 extra: {
-                  user: this.user
+                  user: params.user,
+                  timeToday: params.totalTime
                 }
               },
               {
                 type: EDropdownTypes.USER_ACCOUNT,
                 extra: {
-                  user: secondAccount
+                  user: secondAccount,
+                  timeToday: moment('00:00:00', 'HH:mm:ss').format("HH:mm:ss")
                 }
               }
             ]
@@ -69,8 +57,44 @@ export class TimeTrackerPageComponent implements OnInit {
           { label: 'Vista empleado' },
           { label: 'Mi perfil' },
           { label: 'Cerrar sesión', fn: () => { console.log('hola'); } }
-      ]}
+      ]},
+      timeTracker: {
+        actualTime: params.actualTime,
+        totalTime: params.totalTime
+      }
     };
+  }
+
+  private getInitialInfo(): void {
+    this.timeTrackerService.get().subscribe((res) => {
+      const { employee, workEntryIn, workEntryOut } = res.data.sort((a,b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())[0];
+      let actualTime: string;
+
+      switch (employee.workStatus) {
+        case EUserStatus.OFFLINE:
+          actualTime = workEntryOut?.date ? moment.utc(moment(workEntryOut.date).diff(moment(workEntryIn.date))).format("HH:mm:ss") : moment('00:00:00', 'HH:mm:ss').format("HH:mm:ss");
+          break;
+        case EUserStatus.PAUSED:
+        case EUserStatus.ONLINE:
+          if (workEntryOut?.date) {
+            actualTime = moment.utc(moment(workEntryOut.date).diff(moment(workEntryIn.date))).format("HH:mm:ss");
+          } else {
+            actualTime = moment.utc(moment().diff(moment(workEntryIn.date))).format("HH:mm:ss");
+          }
+          break;
+      }
+
+      this.setConfig({
+        user: {
+          id: employee.id,
+          name: `${employee.firstName} ${employee.lastName}`,
+          avatar: 'https://i.pravatar.cc/32?img=1',
+          status: employee.workStatus
+        },
+        actualTime: actualTime,
+        totalTime: actualTime
+      });
+    });
   }
 
 }

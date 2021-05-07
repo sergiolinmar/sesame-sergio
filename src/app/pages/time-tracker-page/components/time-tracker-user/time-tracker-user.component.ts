@@ -1,5 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { IUser } from 'src/app/shared/models/user.model';
+import { EUserStatus, IUser } from 'src/app/shared/models/user.model';
 
 @Component({
   selector: 'app-time-tracker-user',
